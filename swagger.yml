@@ -1,0 +1,161 @@
+swagger: "2.0"
+info:
+  description: "This is a sample for ajira"
+  version: "v_0.0.1"
+  title: "Swagger Ajira"
+basePath: "/ajira"
+tags:
+- name: "Ajira"
+  description: "Ajira Job Interview"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+schemes:
+- "https"
+- "http"
+paths:
+  /devices:
+    post:
+      tags:
+      - "Ajira"
+      summary: "Add new device"
+      description: "Create the new entry for device"
+      operationId: "addDevices"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Device"
+        description: "data object that needs to be added to the device"
+        required: true
+        schema:
+          $ref: "#/definitions/AddDevice"
+      responses:
+        "201": 
+          description: "Successfully added new device"
+        "405":
+          description: "Invalid input"
+    get:
+      tags:
+      - "Ajira"
+      summary: "Fetch all device"
+      description: "Fetch all device"
+      operationId: "fetchDevices"
+      responses:
+        "302":
+          description: "Found"
+        "404":
+          description: "Not Found"
+  /connections:
+    post:
+      tags:
+      - "Ajira"
+      summary: "Add new connections"
+      description: "Create the new entry for connections"
+      operationId: "addConnection"
+      consumes:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Device"
+        description: "data object that needs to be added to the connections"
+        required: true
+        schema:
+          $ref: "#/definitions/AddConnection"
+      responses:
+        "201": 
+          description: "Successfully added new connection"
+        "405":
+          description: "Invalid input"
+  /info-routes:
+    get:
+      tags:
+      - "Ajira"
+      summary: "Fetch routes"
+      description: "Fetch routes"
+      operationId: "fetchRoutes"
+      parameters:
+      - name: from
+        in: query
+        description: "from"
+        type: string
+      - name: to
+        in: query
+        description: "to"
+        type: string
+      responses:
+        "302":
+          description: "Found"
+        "404":
+          description: "Not Found"
+  /devices/{device}/strength:
+    put:
+      tags:
+      - "Ajira"
+      consumes:
+      - "application/xml"
+      - "application/json"
+      summary: "Modify the strength"
+      description: "Modify the strength"
+      operationId: "modifyStrength"
+      parameters:
+      - name: device
+        in: path
+        required: true
+        description: "device"
+        type: string
+      - in: "body"
+        name: "value"
+        description: "data object that needs to be modify to the connections values"
+        required: true
+        schema:
+          $ref: "#/definitions/ModifyValue"
+      responses:
+        "200":
+          description: "Done"
+        "405":
+          description: "Invaild Input"
+definitions:
+  AddDevice:
+    type: "object"
+    required:
+    - "type"
+    - "name"
+    properties:
+      type:
+        $ref: '#/definitions/TypeEnum'
+      name:
+        type: "string"
+        example: "A1"
+        uniqueItems: true
+    xml:
+      name: "AddDevice"
+  TypeEnum:
+    type: string
+    enum: 
+      - COMPUTER,
+      - REPEATER
+    description: >
+      `COMPUTER` - COMPUTER
+      `REPEATER` - REPEATER
+  AddConnection:
+    type: "object"
+    required: 
+    - "source"
+    - "targets"
+    properties:
+      source:
+        type: "string"
+        example: "A1"
+      targets:
+        type: "array"
+        items:
+          type: "string"
+  ModifyValue:
+    type: "object"
+    required: 
+    - "value"
+    properties:
+      value:
+        type: "string" 
